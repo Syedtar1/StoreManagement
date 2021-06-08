@@ -4,7 +4,7 @@ const mongoose =require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    productname:String,
+    product:String,
     manufacturer:String,
     instock:Number,
     lastpurchasedon:Date

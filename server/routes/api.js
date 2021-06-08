@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const mongoose = require("mongoose");
 
@@ -7,6 +8,8 @@ const users = require("../Models/user");
 const distributorInventory = require("../Models/distributorinventory");
 const saleOrder = require("../Models/saleorder");
 const customerBilling = require("../Models/customerbilling");
+const inventory = require('../Models/inventory');
+const product=require('../Models/productmaster');
 
 const db =
   "mongodb+srv://Sa-user1:SA1234567@cluster0.kjen7.mongodb.net/StoreManagement?retryWrites=true&w=majority";
@@ -14,13 +17,35 @@ const db =
 mongoose.connect(db, (err) => {
   if (err) {
     res.status(401).send({
-      errorMessage: err,
+      message: err,
       statusCode: 401,
     });
   } else {
     console.log("Connected to Mongodb..");
   }
 });
+
+function verifyToken(req, res, next)
+{
+if(!req.headers.authorization)
+{
+return res.status(401).send('unauthorized request');
+}
+
+let token =req.headers.authorization.split(' ')[1]
+if(token ==='null')
+{
+return res.status(401).send('unauthorized request');
+}
+
+let payload =jwt.verify(token, 'secretKey');
+if(!payload)
+{
+return res.status(401).send('unauthorized request');
+}
+req._id=payload.subject
+next();
+}
 
 router.get("/", (req, res) => {
   res.send("from API route");
@@ -33,10 +58,136 @@ router.post("/register", (req, res) => {
   user.save((err, result) => {
     if (err) {
       res.status(401).send({
-        errorMessage: err,
+        message: err,
         statusCode: 401,
       });
-    } else res.status(200).send(result);
+    } 
+    else {
+        let payload = {subject:result._id};
+        let token = jwt.sign(payload, 'secretKey');
+      res.status(200).send({token});
+    }
+  });
+});
+
+//Get all user Profile API
+router.get("/profile", verifyToken,(req, res) => {
+
+  users.find({}, (err, result) => {
+    if (err) {
+      res.status(400).send({
+        message:err,
+        statusCode: 400,
+      });
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+//Get all user Profile API
+router.get("/profileBy/:id", verifyToken,(req, res) => {
+  const { id } = req.params;
+  users.find({_id:id}, (err, result) => {
+    if (err) {
+      res.status(400).send({
+        message:err,
+        statusCode: 400,
+      });
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+
+//Update Profile API
+router.put("/profile", verifyToken,(req, res) => {
+  let userData = req.body;
+ 
+  users.updateOne(
+    {_id:userData._id},
+    {
+      firstname:userData.firstname,
+      lastname:userData.lastname,
+      email:userData.email
+    },
+    (err, result) => {
+      if (err) {
+        res.status(400).send({
+        message: err,
+          statusCode: 400,
+        });
+      } else {
+       
+        res.status(200).send(result);
+      }
+    }
+  );
+});
+
+//Reset User Password API
+router.put("/resetpassword", verifyToken,(req, res) => {
+  let userData = req.body;
+ 
+  users.updateOne(
+    {_id:userData._id},
+    {
+      password:userData.password
+    },
+    (err, result) => {
+      if (err) {
+        res.status(400).send({
+        message: err,
+          statusCode: 400,
+        });
+      } else {
+       
+        res.status(200).send(result);
+      }
+    }
+  );
+});
+
+//Lock/Unlock User API
+router.put("/useraccess", verifyToken,(req, res) => {
+  let userData = req.body;
+ 
+  users.updateOne(
+    {_id:userData._id},
+    {
+      isactive:userData.isactive
+    },
+    (err, result) => {
+      if (err) {
+        res.status(400).send({
+        message: err,
+          statusCode: 400,
+        });
+      } else {
+       
+        res.status(200).send(result);
+      }
+    }
+  );
+});
+
+
+
+
+//Get logged in user profile API
+router.get("/Order/:id", verifyToken,(req, res) => {
+  const { id } = req.params;
+
+  users.find({_id:id}, (err, result) => {
+    if (err) {
+      res.status(400).send({
+        message:err,
+        statusCode: 400,
+      });
+    } else {
+      res.status(200).send(result);
+    }
   });
 });
 
@@ -44,31 +195,34 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   let userData = req.body;
 
-  users.findOne({ email: userData.email }, (err, result) => {
+  users.findOne({ email: userData.email}, (err, userResult) => {
     if (err) {
       res.status(400).send({
-        errorMessage:err,
+        message:err,
         statusCode: 400,
       });
     } else {
-      if (!result) {
+      
+      if (!userResult) {
         res.status(401).send({
-        errorMessage: "Invalid email",
+        message: "Invalid email",
           statusCode: 401,
         });
       } else {
-        if (!result.isactive) {
+        if (!userResult.isactive) {
           res.status(401).send({
-            errorMessage: "Account is inactive.",
+            message: "Account is inactive.",
             statusCode: 401,
           });
-        } else if (result.password !== userData.password) {
+        } else if (userResult.password !== userData.password) {
           res.status(401).send({
-            errorMessage: "invalid pasword.",
+            message: "invalid pasword.",
             statusCode: 401,
           });
         } else {
-          res.status(200).send(result);
+          let payload = {subject:userResult._id};
+          let token = jwt.sign(payload, 'secretKey');
+          res.status(200).send({token,userResult});
         }
       }
     }
@@ -76,11 +230,11 @@ router.post("/login", (req, res) => {
 });
 
 //Get Distributor Inventry API
-router.get("/distributorinventorylist", (req, res) => {
+router.get("/distributorinventory", verifyToken,(req, res) => {
   distributorInventory.find({}, (err, result) => {
     if (err) {
       res.status(400).send({
-        errorMessage:err,
+        message:err,
         statusCode: 400,
       });
     } else {
@@ -90,7 +244,7 @@ router.get("/distributorinventorylist", (req, res) => {
 });
 
 //Post Distributor Inventry API
-router.post("/distributorinventory", (req, res) => {
+router.post("/distributorinventory",verifyToken ,(req, res) => {
   let distributorinventoryData = req.body;
   let distributorInventoryOne = new distributorInventory(
     distributorinventoryData
@@ -98,21 +252,74 @@ router.post("/distributorinventory", (req, res) => {
   distributorInventoryOne.save((err, result) => {
     if (err) {
       res.status(400).send({
-        errorMessage:err, 
+        message:err, 
         statusCode: 400,
       });
     } else {
       res.status(200).send(result);
     }
   });
+});
+
+//Get inventory API
+router.get("/inventory",verifyToken ,(req, res) => {
+  inventory.find({}, (err, result) => {
+    if (err) {
+      res.status(400).send({
+        message:err,
+        statusCode: 400,
+      });
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+//Put Inventry
+router.put("/inventory", verifyToken,(req, res) => {
+  let InventoryData = req.body;
+ 
+  inventory.updateOne(
+    {_id:InventoryData._id},
+    {
+      instock:InventoryData.instock
+    },
+    (err, result) => {
+      if (err) {
+        res.status(400).send({
+        message: err,
+          statusCode: 400,
+        });
+      } else {
+       
+        res.status(200).send(result);
+      }
+    }
+  );
 });
 
 //Get Order API
-router.get("/Order", (req, res) => {
+router.get("/Order", verifyToken,(req, res) => {
+  
   saleOrder.find({}, (err, result) => {
     if (err) {
       res.status(400).send({
-        errorMessage:err,
+        message:err,
+        statusCode: 400,
+      });
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+//Get Order by ID API
+router.get("/Order/:id", verifyToken,(req, res) => {
+  const { id } = req.params;
+
+  saleOrder.find({_id:id}, (err, result) => {
+    if (err) {
+      res.status(400).send({
+        message:err,
         statusCode: 400,
       });
     } else {
@@ -121,9 +328,8 @@ router.get("/Order", (req, res) => {
   });
 });
 
-
 //post order API
-router.post("/order", (req, res) => {
+router.post("/order", verifyToken,(req, res) => {
   let orderData = req.body;
   let saleOrderPostData = new saleOrder(orderData);
 
@@ -132,7 +338,7 @@ router.post("/order", (req, res) => {
     contactnumber: saleOrderPostData.customernumber,
     email: saleOrderPostData.email,
     lastbillingdate: new Date(),
-    lastbillamount:saleOrderPostData.price,
+    lastbillamount:orderData.discountedPrice,
   };
 
   let customerBillingData = new customerBilling(customerBillingObject);
@@ -142,7 +348,7 @@ router.post("/order", (req, res) => {
         saleOrderPostData.save((err1, result1) => {
         if (err1) {
           res.status(400).send({
-            errorMessage:err1,
+            message:err1,
             statusCode: 400,
           });
         } else {
@@ -151,7 +357,7 @@ router.post("/order", (req, res) => {
       });
     } else {
       res.status(400).send({
-        errorMessage:err,
+        message:err,
         statusCode: 400,
       });
     }
@@ -159,14 +365,14 @@ router.post("/order", (req, res) => {
 });
 
 //update order API
-router.put("/order", (req, res) => {
+router.put("/order", verifyToken,(req, res) => {
   let orderData = req.body;
-  
-  saleOrder.findByIdAndUpdate(
-    orderData._id,
+ 
+  saleOrder.updateOne(
+    {_id:orderData._id},
     {
       customername: orderData.customername,
-      contactnumber: orderData.customernumber,
+      contactnumber: orderData.contactnumber,
       email: orderData.email,
       productname: orderData.productname,
       manufacturer: orderData.manufacturer,
@@ -176,10 +382,11 @@ router.put("/order", (req, res) => {
     (err, result) => {
       if (err) {
         res.status(400).send({
-        errorMessage: err,
+        message: err,
           statusCode: 400,
         });
       } else {
+       
         res.status(200).send(result);
       }
     }
@@ -187,15 +394,13 @@ router.put("/order", (req, res) => {
 });
 
 //Delete order API
-router.delete("/order", (req, res) => {
-  let orderData = req.body;
+router.delete("/order/:id", verifyToken,(req, res) => {
+  const { id } = req.params;
 
-    console.log(orderData);
-
-  saleOrder.deleteOne({ _id: orderData._id }, (err, result) => {
+  saleOrder.findOneAndDelete({ _id: id }, (err, result) => {
     if (err) {
       res.status(400).send({
-        errorMessage: err,
+        message: err,
         statusCode: 400,
       });
     } else {
@@ -203,5 +408,22 @@ router.delete("/order", (req, res) => {
     }
   });
 });
+
+
+router.get('/product',verifyToken,(req, res) => {
+
+  product.find({}, (err, result) => {
+    if (err) {
+      res.status(400).send({
+        message:err,
+        statusCode: 400,
+      });
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
+
+
 
 module.exports = router;
