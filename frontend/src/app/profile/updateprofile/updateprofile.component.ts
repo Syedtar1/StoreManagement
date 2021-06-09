@@ -1,21 +1,18 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/users';
 import { AESEncryptDecryptService } from 'src/app/services/aesencrypt-decrypt.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { SharedService } from 'src/app/services/shared.service';
 
-
-
 @Component({
   selector: 'app-updateprofile',
   templateUrl: './updateprofile.component.html',
-  styleUrls: ['./updateprofile.component.css']
+  styleUrls: ['./updateprofile.component.css'],
 })
-export class UpdateprofileComponent implements OnInit, AfterViewInit{
+export class UpdateprofileComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   public isRegisteredSuccessfully = false;
   private formSubmitAttempt = false;
@@ -25,23 +22,25 @@ export class UpdateprofileComponent implements OnInit, AfterViewInit{
   public isDisabled = false;
   public userType: string;
 
-
   constructor(
     private sharedService: SharedService,
     private _router: Router,
     private fb: FormBuilder,
     private auth: AuthService,
-    private _security:AESEncryptDecryptService,
-    private _profileService:ProfileService) { 
+    private _security: AESEncryptDecryptService,
+    private _profileService: ProfileService
+  ) {
     if (localStorage.getItem('usertype') !== null) {
       this.userType = this._security.decrypt(localStorage.getItem('usertype'));
     }
     this.form = this.fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      email: this.userType==='owner'? ['', Validators.email]: [{ value: '', disabled: true }, Validators.email]
+      email:
+        this.userType === 'owner'
+          ? ['', Validators.email]
+          : [{ value: '', disabled: true }, Validators.email],
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -55,7 +54,6 @@ export class UpdateprofileComponent implements OnInit, AfterViewInit{
     this.orderData = this.sharedService.userData;
     this.setControlValue();
   }
-
 
   onSubmit() {
     this.isRegisteredSuccessfully = false;
@@ -77,7 +75,6 @@ export class UpdateprofileComponent implements OnInit, AfterViewInit{
           (err: any) => console.log(err),
           () => console.log('All Done, getting data from server')
         );
-
       } catch (err) {
         this.isRegisteredSuccessfully = false;
         this.error = err;
@@ -95,5 +92,4 @@ export class UpdateprofileComponent implements OnInit, AfterViewInit{
   onCancel() {
     this._router.navigate(['/profile']);
   }
-
 }

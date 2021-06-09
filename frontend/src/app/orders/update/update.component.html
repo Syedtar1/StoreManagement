@@ -1,84 +1,75 @@
 <mat-card>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <h2>Update Sales Order</h2>
-        <mat-error *ngIf="isRegisteredSuccessfully">
-          user registered successfully.
-        </mat-error>
-        <mat-error *ngIf="!isRegisteredSuccessfully">
-          {{error}}
-        </mat-error>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h2>Update Sales Order</h2>
+      <mat-error *ngIf="isRegisteredSuccessfully">
+        user registered successfully.
+      </mat-error>
+      <mat-error *ngIf="!isRegisteredSuccessfully">
+        {{error}}
+      </mat-error>
 
-    
-        <mat-form-field class="full-width-input">
-            <input matInput placeholder="Customer Name" autocomplete="off" formControlName="customername"
-            autocomplete="off"
-            required>
-            <mat-error>
-             Enter your customer name
-            </mat-error>
-          </mat-form-field>
-         
-          <mat-form-field class="full-width-input">
-            <input matInput placeholder="customer number" minlength="10" maxlength="10" autocomplete="off" formControlName="contactnumber"
-            required>
-            <mat-error>
-             Enter your customer number
-            
-            </mat-error>
-          </mat-form-field>
-         
-        <mat-form-field class="full-width-input">
-          <input matInput placeholder="Email" autocomplete="off" formControlName="email"
-          autocomplete="off"
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Customer Name" autocomplete="off" formControlName="customername" autocomplete="off"
           required>
-          <mat-error>
-            Please provide a valid email address
-          </mat-error>
-        </mat-form-field>
-       
-        <mat-form-field class="full-width-input">
-            <input matInput placeholder="Product Name" autocomplete="off" formControlName="productname"
-            autocomplete="off"
-            required >
-            <mat-error>
-              Please provide product name
-            </mat-error>
-        </mat-form-field>
-        
-        <mat-form-field class="full-width-input">
-            <input matInput placeholder="manufacturer" autocomplete="off" formControlName="manufacturer"
-            autocomplete="off"
-            required >
-            <mat-error>
-              Please provide manufacturer
-            </mat-error>
-        </mat-form-field>
-       
-        <mat-form-field class="full-width-input">
-            <input matInput placeholder="Discount" autocomplete="off" formControlName="discount"
-            autocomplete="off"
-            required >
-            <mat-error>
-              Please provide discount
-            </mat-error>
-        </mat-form-field>
-      
-        <mat-form-field class="full-width-input">
-            <input matInput placeholder="Price" autocomplete="off" formControlName="price"
-            autocomplete="off"
-            required >
-            <mat-error>
-              Please provide price
-            </mat-error>
-        </mat-form-field>
-       
-        <button mat-raised-button color="primary" [disabled]="isDisabled">Update</button>
-        &nbsp; &nbsp; &nbsp;
-        <button mat-raised-button color="warn" [disabled]="isDisabled" (click)="onCancel()">Cancel</button>
+        <mat-error>
+          Enter your customer name
+        </mat-error>
+      </mat-form-field>
 
-      </form>
-    
-    </mat-card-content>
-  </mat-card>
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Contact number" minlength="10" maxlength="10" autocomplete="off"
+          formControlName="contactnumber" required>
+        <mat-error>
+          Enter your Contact number
 
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Email" autocomplete="off" formControlName="email" autocomplete="off" required>
+        <mat-error>
+          Please provide a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Product Name" autocomplete="off" formControlName="productname" autocomplete="off"
+          required>
+        <mat-error>
+          Please provide product name
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="manufacturer" autocomplete="off" formControlName="manufacturer" autocomplete="off"
+          required>
+        <mat-error>
+          Please provide manufacturer
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Discount" autocomplete="off" formControlName="discount" autocomplete="off"
+          required>
+        <mat-error>
+          Please provide discount
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Price" autocomplete="off" formControlName="price" autocomplete="off" required>
+        <mat-error>
+          Please provide price
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="isDisabled">Update</button>
+      &nbsp; &nbsp; &nbsp;
+      <button mat-raised-button color="warn" [disabled]="isDisabled" (click)="onCancel()">Cancel</button>
+
+    </form>
+
+  </mat-card-content>
+</mat-card>

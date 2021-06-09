@@ -4,22 +4,18 @@ import { Observable } from 'rxjs';
 import { Inventory } from '../models/inventory';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InventoryService {
+  private _url = 'http://localhost:3000/api/inventory';
 
-  private _url="http://localhost:3000/api/inventory";
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  inventory():Observable<Inventory[]>
-  {
-      return this.http.get<Inventory[]>(this._url);
+  inventory(): Observable<Inventory[]> {
+    return this.http.get<Inventory[]>(this._url);
   }
 
- 
-
-  put(inventory:Inventory):Observable<Inventory>
-  {
-      return this.http.put<Inventory>(this._url,inventory);
+  put(inventory: Inventory): Observable<Inventory> {
+    return this.http.put<Inventory>(this._url, inventory);
   }
 }

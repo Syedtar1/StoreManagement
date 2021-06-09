@@ -6,24 +6,22 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-
- 
   form: FormGroup;
   public isRegisteredSuccessfully = false;
   private formSubmitAttempt = false;
   private returnUrl: string;
-  public error:any;
+  public error: any;
   public isDisabled = false;
- 
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private auth:AuthService) {
+    private auth: AuthService
+  ) {
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/order';
 
     this.form = this.fb.group({
@@ -31,11 +29,11 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      usertype: ['', Validators.required]
+      usertype: ['', Validators.required],
     });
   }
 
- ngOnInit() {
+  ngOnInit() {
     // if (await this.authService.checkAuthenticated()) {
     //   await this.router.navigate([this.returnUrl]);
     // }
@@ -44,13 +42,13 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      usertype: ['', Validators.required]
+      usertype: ['', Validators.required],
     });
   }
   onSubmit() {
     this.isRegisteredSuccessfully = false;
     this.formSubmitAttempt = false;
-    this.isDisabled =true;
+    this.isDisabled = true;
     if (this.form.valid) {
       try {
         const username = this.form.get('username')?.value;
@@ -59,25 +57,27 @@ export class RegisterComponent implements OnInit {
         const lastname = this.form.get('lastname')?.value;
         const usertype = this.form.get('usertype')?.value;
 
-        this.auth.register({
-          usertype:usertype,
-          firstname:firstname,
-          lastname:lastname,
-          email:username,
-          password:password,
-          isactive:true
-        }).subscribe(
-          (data) =>{
-          this.isRegisteredSuccessfully= true;
-          this.router.navigate(['/login']);
-          this.clearForm()
-          
-          this.isDisabled =false;
-        },
-          (err:any) =>console.log(err),
-          () => console.log('All Done, getting data from server')
-        );
-        
+        this.auth
+          .register({
+            usertype: usertype,
+            firstname: firstname,
+            lastname: lastname,
+            email: username,
+            password: password,
+            isactive: true,
+          })
+          .subscribe(
+            (data) => {
+              this.isRegisteredSuccessfully = true;
+              this.router.navigate(['/login']);
+              this.clearForm();
+
+              this.isDisabled = false;
+            },
+            (err: any) => console.log(err),
+            () => console.log('All Done, getting data from server')
+          );
+
         // console.log({
         //   usertype:usertype,
         //   firstname:firstname,
@@ -85,22 +85,18 @@ export class RegisterComponent implements OnInit {
         //   username:username,
         //   password:password
         // });
-       
-        
       } catch (err) {
         this.isRegisteredSuccessfully = false;
-        this.error=err;
-        this.isDisabled =false;
+        this.error = err;
+        this.isDisabled = false;
       }
     } else {
       this.formSubmitAttempt = true;
-      this.isDisabled =false;
+      this.isDisabled = false;
     }
-  } 
-
+  }
 
   clearForm() {
-
     // this.form.reset({
     //   'usertype':'',
     //   'firstname':'',
@@ -109,14 +105,13 @@ export class RegisterComponent implements OnInit {
     //   'password':'',
     //      });
 
-         this.form.controls['firstname'].setValue(undefined);
-         this.form.controls['lastname'].setValue(undefined);
-         this.form.controls['username'].setValue(undefined);
-         this.form.controls['password'].setValue(undefined);
-         this.form.controls['usertype'].setValue(undefined);
-         this.form.markAsPristine();
-         this.form.markAsUntouched();
-         this.form.updateValueAndValidity();
-    }
-
+    this.form.controls['firstname'].setValue(undefined);
+    this.form.controls['lastname'].setValue(undefined);
+    this.form.controls['username'].setValue(undefined);
+    this.form.controls['password'].setValue(undefined);
+    this.form.controls['usertype'].setValue(undefined);
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.form.updateValueAndValidity();
+  }
 }

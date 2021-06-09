@@ -13,21 +13,37 @@ import { UpdateprofileComponent } from './profile/updateprofile/updateprofile.co
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
-  {path:'',redirectTo:'/order', pathMatch:'full'},
-  {path:'order', component:OrdersComponent ,canActivate:[AuthGuard]},
-  {path:'order/update', component:UpdateComponent,canActivate:[AuthGuard]},
-  {path:'order/add', component:AddComponent,canActivate:[AuthGuard]},
-  {path:'inventory', component:InventoryComponent,canActivate:[AuthGuard]},
-  {path:'distributors', component:DistributorsinventoryComponent,canActivate:[AuthGuard]},
-  {path:'distributors/add', component:AdddistributorsComponent,canActivate:[AuthGuard]},
-  {path:'profile',component:ProfileComponent},
-  {path:'profile/update',component:UpdateprofileComponent},
-  {path:'login',component:LoginComponent},
-  {path:'register',component:RegisterComponent}
+  { path: '', redirectTo: '/order', pathMatch: 'full' },
+  { path: 'order', component: OrdersComponent, canActivate: [AuthGuard] },
+  {
+    path: 'order/update',
+    component: UpdateComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'order/add', component: AddComponent, canActivate: [AuthGuard] },
+  {
+    path: 'inventory',
+    component: InventoryComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'distributors',
+    component: DistributorsinventoryComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'distributors/add',
+    component: AdddistributorsComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'profile/update', component: UpdateprofileComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

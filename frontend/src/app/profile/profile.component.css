@@ -7,9 +7,11 @@ table {
   width: 100%;
 }
 
-td, th {
+td,
+th {
   width: 18%;
 }
-mat-button{
+
+mat-button {
   border: 1px black;
 }

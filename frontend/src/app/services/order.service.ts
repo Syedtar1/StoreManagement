@@ -5,52 +5,40 @@ import { Order } from '../models/orders';
 import { Product } from '../models/product';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class OrderService {
-  
-  private _url="http://localhost:3000/api/order";
-  private _urlProduct="http://localhost:3000/api/product";
+  private _url = 'http://localhost:3000/api/order';
+  private _urlProduct = 'http://localhost:3000/api/product';
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   //get
-  get():Observable<Order[]>
-    {
-        return this.http.get<Order[]>(this._url);
-    }
+  get(): Observable<Order[]> {
+    return this.http.get<Order[]>(this._url);
+  }
 
-    //get by id
-    getById(_id:String):Observable<Order>
-    {
-        return this.http.get<Order>(this._url+'/'+_id);
-    }
-
+  //get by id
+  getById(_id: String): Observable<Order> {
+    return this.http.get<Order>(this._url + '/' + _id);
+  }
 
   //add
-  add(order:any):Observable<Order>
-    {
-        return this.http.post<Order>(this._url,order);
-    }
+  add(order: any): Observable<Order> {
+    return this.http.post<Order>(this._url, order);
+  }
 
   //put
-  put(order:Order):Observable<Order>
-  {
-      return this.http.put<Order>(this._url,order);
+  put(order: Order): Observable<Order> {
+    return this.http.put<Order>(this._url, order);
   }
 
   //delete
-  delete(id:string):Observable<Order>
-  {
-      return this.http.delete<Order>(this._url+"/"+id);
+  delete(id: string): Observable<Order> {
+    return this.http.delete<Order>(this._url + '/' + id);
   }
 
-  getProduct():Observable<Product[]>
-  {
-      return this.http.get<Product[]>(this._urlProduct);
+  getProduct(): Observable<Product[]> {
+    return this.http.get<Product[]>(this._urlProduct);
   }
-
 }
-  
-

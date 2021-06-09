@@ -1,48 +1,43 @@
 <mat-card>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <h2>Update Profile</h2>
-        <mat-error *ngIf="isRegisteredSuccessfully">
-          user registered successfully.
-        </mat-error>
-        <mat-error *ngIf="!isRegisteredSuccessfully">
-          {{error}}
-        </mat-error>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h2>Update Profile</h2>
+      <mat-error *ngIf="isRegisteredSuccessfully">
+        Profile updated successfully.
+      </mat-error>
+      <mat-error *ngIf="!isRegisteredSuccessfully">
+        {{error}}
+      </mat-error>
 
-    
-        <mat-form-field class="full-width-input">
-            <input matInput placeholder="First Name" autocomplete="off" formControlName="firstname"
-            autocomplete="off"
-            required>
-            <mat-error>
-             Enter your first name
-            </mat-error>
-          </mat-form-field>
-         
-          <mat-form-field class="full-width-input">
-            <input matInput placeholder="First Name" autocomplete="off" formControlName="lastname"
-            autocomplete="off"
-            required>
-            <mat-error>
-             Enter your last name
-            </mat-error>
-          </mat-form-field>
-         
-        <mat-form-field class="full-width-input">
-          <input matInput placeholder="Email" autocomplete="off" formControlName="email"
-          autocomplete="off"
+
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="First Name" autocomplete="off" formControlName="firstname" autocomplete="off"
           required>
-          <mat-error>
-            Please provide a valid email address
-          </mat-error>
-        </mat-form-field>
-       
-        <button mat-raised-button color="primary" [disabled]="isDisabled">Update</button>
-        &nbsp; &nbsp; &nbsp;
-        <button mat-raised-button color="warn" [disabled]="isDisabled" (click)="onCancel()">Cancel</button>
+        <mat-error>
+          Enter your first name
+        </mat-error>
+      </mat-form-field>
 
-      </form>
-    
-    </mat-card-content>
-  </mat-card>
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="First Name" autocomplete="off" formControlName="lastname" autocomplete="off"
+          required>
+        <mat-error>
+          Enter your last name
+        </mat-error>
+      </mat-form-field>
 
+      <mat-form-field class="full-width-input">
+        <input matInput placeholder="Email" autocomplete="off" formControlName="email" autocomplete="off" required>
+        <mat-error>
+          Please provide a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="isDisabled">Update</button>
+      &nbsp; &nbsp; &nbsp;
+      <button mat-raised-button color="warn" [disabled]="isDisabled" (click)="onCancel()">Cancel</button>
+
+    </form>
+
+  </mat-card-content>
+</mat-card>
