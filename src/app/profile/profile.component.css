@@ -1,0 +1,17 @@
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 200px;
+}
+
+td,
+th {
+  width: 18%;
+}
+
+mat-button {
+  border: 1px black;
+}

@@ -1,0 +1,103 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h2>Update Sales Order</h2>
+      <mat-error *ngIf="isRegisteredSuccessfully">
+        Order added successfully.
+      </mat-error>
+      <mat-error *ngIf="!isRegisteredSuccessfully">
+        {{error}}
+      </mat-error>
+
+
+      <mat-form-field class="full-width-input">
+        <mat-label>Customer Name</mat-label>
+        <input matInput placeholder="Customer Name" autocomplete="off" formControlName="customername" autocomplete="off"
+          required>
+        <mat-error>
+          Enter your customer name
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <mat-label>Customer Number</mat-label>
+        <input matInput placeholder="customer number" minlength="10" maxlength="10" autocomplete="off"
+          formControlName="contactnumber" required>
+        <mat-error>
+          Enter your customer number
+
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" autocomplete="off" formControlName="email" autocomplete="off" required>
+        <mat-error>
+          Please provide a valid email address
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="fill">
+        <mat-label>Manufacturer</mat-label>
+        <mat-select matNativeControl required formControlName="manufacturer">
+          <mat-option *ngFor="let item of productData" value={{item.manufacturer}}>
+            {{item.manufacturer}}
+          </mat-option>
+
+
+        </mat-select>
+        <mat-error>
+          Please select manufacturer type
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="fill">
+        <mat-label>Product Name</mat-label>
+        <mat-select matNativeControl required formControlName="productname">
+          <mat-option *ngFor="let item of productData" value={{item.product}}>
+            {{item.product}}
+          </mat-option>
+
+
+        </mat-select>
+        <mat-error>
+          Please select product type
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Price</mat-label>
+        <mat-select matNativeControl required formControlName="price">
+          <mat-option *ngFor="let item of productData" value={{item.mrp}}>
+            {{item.mrp + ' -- '+item.manufacturer}}
+          </mat-option>
+
+
+        </mat-select>
+        <mat-error>
+          Please select price type
+        </mat-error>
+      </mat-form-field>
+
+
+
+      <mat-form-field class="full-width-input">
+        <mat-label>Discount</mat-label>
+        <input matInput placeholder="Discount" autocomplete="off" formControlName="discount" autocomplete="off"
+          required>
+        <mat-error>
+          Please provide discount
+        </mat-error>
+      </mat-form-field>
+
+
+      <button mat-raised-button color="primary" [disabled]="isDisabled">Submit</button>
+      &nbsp; &nbsp; &nbsp;
+      <button mat-raised-button color="warn" [disabled]="isDisabled" (click)="onCancel()">Cancel</button>
+
+    </form>
+
+  </mat-card-content>
+</mat-card>

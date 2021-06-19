@@ -1,0 +1,92 @@
+<mat-card>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h2>Add Distributor</h2>
+        <mat-error *ngIf="isRegisteredSuccessfully">
+          user registered successfully.
+        </mat-error>
+        <mat-error *ngIf="!isRegisteredSuccessfully">
+          {{error}}
+        </mat-error>
+
+            <mat-form-field  appearance="fill">
+              <mat-label>Manufacturer</mat-label>
+            <mat-select matNativeControl required formControlName="manufacturer"
+            >
+                <mat-option
+                *ngFor="let item of productData" value={{item.manufacturer}}
+                >
+                {{item.manufacturer}}
+            </mat-option>
+              </mat-select>
+              <mat-error>
+                Please select manufacturer type
+              </mat-error>
+            </mat-form-field>
+
+
+        <mat-form-field  appearance="fill">
+          <mat-label>Product</mat-label>
+            <mat-select matNativeControl required formControlName="product"
+            >
+            <mat-option
+            *ngFor="let item of productData" value={{item.product}}
+            >
+            {{item.product}}
+            </mat-option>
+               
+
+              </mat-select>
+              <mat-error>
+                Please select product type
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field  appearance="fill">
+              <mat-label>Price</mat-label>
+                <mat-select matNativeControl required formControlName="distributorPrice"
+                >
+                <mat-option
+                *ngFor="let item of productData" value={{item.mrp}}
+                >
+                {{item.mrp + ' -- '+item.manufacturer}}
+                </mat-option>
+                   
+    
+                  </mat-select>
+                  <mat-error>
+                    Please select price type
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width-input">
+                  <mat-label>Distributor Name</mat-label>
+                  <input matInput placeholder="distributor Name" autocomplete="off" formControlName="distributorname"
+                  autocomplete="off"
+                  required>
+                  <mat-error>
+                   Enter your customer name
+                  </mat-error>
+                </mat-form-field>
+        
+        
+        <mat-form-field class="full-width-input">
+          <mat-label>Total Unit</mat-label>
+            <input matInput placeholder="total unit" autocomplete="off" formControlName="unitreceived"
+            autocomplete="off"
+            required >
+            <mat-error>
+              Please provide number of unit
+            </mat-error>
+        </mat-form-field>
+      
+       
+        <button mat-raised-button color="primary" [disabled]="isDisabled">Submit</button>
+        &nbsp; &nbsp; &nbsp;
+        <button mat-raised-button color="warn" [disabled]="isDisabled" (click)="onCancel()">Cancel</button>
+
+      </form>
+    
+    </mat-card-content>
+  </mat-card>
+
